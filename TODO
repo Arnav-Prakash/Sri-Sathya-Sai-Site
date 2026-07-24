@@ -1,0 +1,48 @@
+Symbol Samples:
+  [x] Done
+  [-] Cancelled/Failed
+  [] Incomplete
+
+Sample Tags:
+  @tag
+  @today
+  @low
+  @high
+  @critical
+
+Shortcuts:
+  [] Option+Enter = New Task
+  [x] Option+D = Done
+  [-] Option+C = Cancelled
+  [] Option+S = Started @started(26-07-24 08:05)
+
+Formatting:
+  [] *Bold* = bold
+  [] _italic_ = italic
+  [] ~Strikethrough~ = Strikethrough
+  [] `Code` = Code
+
+  
+Todo:
+  [] Redesign the website to make it more visually appealing and user-friendly.
+  [] Implement a responsive design to ensure the website looks good on all devices.
+  [] Add more pages and different new features
+  [] Add PDF song lyrics viewable compatibility and custom systems to manage audio files and pdf files.
+  [] Add Profile picture adding and updating capabilities
+  [] Add registration verification and email verification for new users.
+  [] Add a search feature to allow users to easily find specific content on the website.
+  [] Add a contact form to allow users to easily get in touch with the website administrators.
+  [] Add a blog or news section to keep users updated on the latest developments and events related to the website's content.
+  [] Add social media integration to allow users to easily share content from the website on their social media accounts.
+  [] Add social login options
+  [] Add a feature to allow users to create and manage playlists of their favorite songs.
+  [] Add a feature to allow users to rate and review songs, and display the average rating for each song on the website.
+  [] Add a feature to allow users to create and manage their own profiles, including the ability to upload a profile picture and update their personal information.
+  [] Add a feature to allow users to follow other users and see their activity on the website, such as their favorite songs and playlists.
+  [] Add a feature to allow users to receive notifications when new songs are added to the website or when their favorite songs are updated.
+  [] Add a feature to allow users to share their favorite songs and playlists with other users on the website, as well as on social media platforms.
+  [] 
+  
+Note:
+  [] The website is currently in development and may not be fully functional. Please report any issues or bugs to the development team.
+  [] The website is intended for personal use and may not be suitable for commercial use. Please contact the development team for more information on licensing and usage rights.
