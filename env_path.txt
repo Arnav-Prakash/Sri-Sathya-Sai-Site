@@ -1,1 +1,1 @@
-sathyasai_site_env
+source .venv/bin/activate
