@@ -1,16 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}
-    <title>Logout | Sri Sathya Sai Bhajans</title>
-{% endblock title %}
-
+{% block title %}<title>Signed out | Sri Sathya Sai Bhajans</title>{% endblock title %}
 {% block content %}
-<div class="container">
-    <br><br><br><br>
-    <h2>You have been Logged Out!</h2>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                <a class="ml-2" href="{% url 'login' %}">Log In Again</a>
-            </small>
-        </div>
-    </div>
+<section class="reset-page"><div class="reset-card"><div class="reset-success-icon">✓</div><p class="eyebrow">Session complete</p><h1>See you soon.</h1><p>You have been signed out. The songs will be here whenever you are ready to return.</p><a class="button" href="{% url 'login' %}">Sign in again <span>→</span></a><a class="reset-back" href="{% url 'home' %}">Continue browsing as a guest</a></div></section>
 {% endblock content %}

@@ -1,30 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title %}
-    <title>Register | Sri Sathya Sai Bhajans</title>
-{% endblock title %}
-
+{% block title %}<title>Create account | Sri Sathya Sai Bhajans</title>{% endblock title %}
 {% block content %}
-<br><br><br><br>
-<div class="container">
-    <br>
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Today</legend>
-                {{ form | crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-danger" type="submit">Sign Up</button>
-            </div>
-        </form>
-        <br>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
-            </small>
-        </div>
-    </div>
-</div>
+<section class="auth-page"><div class="auth-intro"><p class="eyebrow">Make it yours</p><h1>Keep the songs that <em>stay with you.</em></h1><p>Create a free account to save favourites, return to meaningful bhajans, and make this library part of your daily rhythm.</p><div class="auth-note"><span>♡</span> Your listening space, made personal.</div></div><div class="auth-card"><h2>Create your account</h2><p>It only takes a moment to get started.</p><form method="POST">{% csrf_token %}{{ form|crispy }}<button class="button auth-submit" type="submit">Create account <span>→</span></button></form><div class="auth-divider"></div><p class="auth-switch">Already have an account? <a href="{% url 'login' %}">Sign in</a></p></div></section>
 {% endblock content %}

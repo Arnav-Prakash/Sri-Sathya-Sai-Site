@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
+from home import views as home_views
 
 
 urlpatterns = [
@@ -33,7 +34,8 @@ urlpatterns = [
      path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), name="password_reset_complete"),
     path('profile/', user_views.profile, name="profile"),
     path('profile_update/', user_views.profile_update, name="profile-update"),
-    path('profile/favourites/', user_views.favourite_list, name="favourite_list")
+    path('profile/favourites/', user_views.favourite_list, name="favourite_list"),
+    path('fav/<int:id>/', home_views.favourite_add, name="favourite-add")
 ]
 
 handler404 = 'home.views.error_404'

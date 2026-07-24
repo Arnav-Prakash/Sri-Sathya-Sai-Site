@@ -59,11 +59,11 @@ def search(request):
 @login_required
 def favourite_add(request, id):
     song = get_object_or_404(Song, id=id)
-    if song.favourite.filter(id=request.id).exists():
+    if song.favourite.filter(id=request.user.id).exists():
         song.favourite.remove(request.user)
     else:
         song.favourite.add(request.user)
-    return HttpResponse(request.META['HTTP_REFERER'])
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def error_404(request, exception):

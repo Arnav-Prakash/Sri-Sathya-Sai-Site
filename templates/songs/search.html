@@ -1,40 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
-
-{% block title %}
-<title>Search Songs | Sri Sathya Sai Bhajans</title>
-{% endblock title %}
-
+{% block title %}<title>Search: {{ query }} | Sri Sathya Sai Bhajans</title>{% endblock title %}
 {% block content %}
-  <br><br><br><br>
-    <div class="container">
-        <h1 align="center">Search Results</h1>
-        <hr>
-        {% if songs|length < 1 %}
-            <p>No search results</p>
-            Your Search query: <b>{{ query }}</b> did not match any documents.<br>
-            Suggestions:
-            <ul>
-                <li>Make sure that all words are spelled correctly.</li>
-                <li>Try Different keywords.</li>
-                <li>Try more general keywords.</li>
-                <li>Try fewer keywords.</li>
-            <ul>
-        {% endif %}
-        <!--Start List Group-->
-        <ul class="list-group list-group">
-          {% for song in songs %}
-          <a href="{% url 'song-detail' song.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
-            <img style="height: 50px; width: 50px; margin-right: 10px;" class="rounded-circle" src="{{ song.god.image.url }}" alt="Deity Image">
-            <div class="ms-2 me-auto">
-              <div class="fw-bold">{{ song.name }}</div>
-              <i>Raga: {{ song.Raaga.name }}</i>
-            </div>
-            <span class="badge bg-danger rounded-pill">{{ song.god.name }}</span>
-          </a>
-          {% endfor %}
-        </ul>
-        <!--End List Group-->
-    </div>
-    
+<section class="library-page"><div class="library-header"><div><p class="eyebrow">Search results</p><h1>“{{ query }}”</h1></div><p>{% if songs %}{{ songs|length }} songs found in the library.{% else %}Try a different song, raga or deity.{% endif %}</p></div>{% if songs %}<div class="song-list">{% for song in songs %}<a class="song-card" href="{% url 'song-detail' song.id %}"><img class="song-image" src="{{ song.god.image.url }}" alt="{{ song.god.name }}"><div><h2>{{ song.name }}</h2><div class="song-meta"><span>{{ song.Raaga.name }}</span><span>{{ song.god.name }}</span></div></div><span class="song-arrow">↗</span></a>{% endfor %}</div>{% else %}<div class="empty-state"><p>No songs matched that search.</p><a class="button" href="{% url 'all-songs' %}">Browse all songs</a></div>{% endif %}</section>
 {% endblock content %}

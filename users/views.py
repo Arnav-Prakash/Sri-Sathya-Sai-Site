@@ -20,9 +20,14 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'users/profile.html')
+    context = {
+        'favourite_count': request.user.favourite.count(),
+        'library_count': Song.objects.count(),
+    }
+    return render(request, 'users/profile.html', context)
 
 
+@login_required
 def profile_update(request):
     if request.method == "POST":
         u_form = UserUpdateForm(request.POST, instance=request.user)

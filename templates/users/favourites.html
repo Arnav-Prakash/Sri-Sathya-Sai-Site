@@ -1,34 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
-
-{% block title %}
-<title>Favourties | Sri Sathya Sai Bhajans</title>
-{% endblock title %}
-
+{% block title %}<title>Favourites | Sri Sathya Sai Bhajans</title>{% endblock title %}
 {% block content %}
-<br><br><br><br>
-    <br>
-    <div class="container">
-        <h1 align="center">Favourites Songs</h1>
-        <hr>
-        <!--Start List Group-->
-        <ul class="list-group list-group">
-          {% for song in new %}
-          <a href="{% url 'song-detail' song.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
-            <img style="height: 50px; width: 50px; margin-right: 10px;" class="rounded-circle" src="{{ song.god.image.url }}" alt="Deity Image">
-            <div class="ms-2 me-auto">
-              <div class="fw-bold d-flex w-100 justify-content-between">
-                {{ song.name }}
-              </div>
-              <i>Raga: {{ song.Raaga.name }}</i>
-            </div>
-            <span class="badge bg-danger rounded-pill">{{ song.god.name }}
-            </span>
-          </a>
-          <a href="{% url 'favourite-add' song.id %}" class="btn btn-outline-danger">Add to Favourites</a>
-          {% endfor %}
-        </ul>
-        <!--End List Group-->
-    </div>
-    
+<section class="library-page"><div class="library-header"><div><p class="eyebrow">Saved for you</p><h1>Favourites.</h1></div><p>{% if new %}The songs you want to return to, all in one place.{% else %}Save a song from the library and it will appear here.{% endif %}</p></div>{% if new %}<div class="song-list">{% for song in new %}<a class="song-card" href="{% url 'song-detail' song.id %}"><img class="song-image" src="{{ song.god.image.url }}" alt="{{ song.god.name }}"><div><h2>{{ song.name }}</h2><div class="song-meta"><span>{{ song.Raaga.name }}</span><span>{{ song.god.name }}</span></div></div><span class="song-arrow">↗</span></a>{% endfor %}</div>{% else %}<div class="empty-state"><div class="reset-success-icon">♡</div><p>No favourites yet.</p><a class="button" href="{% url 'all-songs' %}">Explore the library <span>→</span></a></div>{% endif %}</section>
 {% endblock content %}

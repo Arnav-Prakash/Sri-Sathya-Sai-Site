@@ -1,33 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title %}
-    <title>Login | Sri Sathya Sai Bhajans</title>
-{% endblock title %}
-
+{% block title %}<title>Sign in | Sri Sathya Sai Bhajans</title>{% endblock title %}
 {% block content %}
-<br><br><br><br>
-<div class="container">
-    <br>
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Log In</legend>
-                {{ form | crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-danger" type="submit">Login</button><br><br>
-                <small class="text-muted ml-2">
-                    <a href="{% url 'password_reset' %}">Forgot Password?</a>
-                </small>
-            </div>
-        </form>
-        <br>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Need An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
-            </small>
-        </div>
-    </div>
-</div>
+<section class="auth-page"><div class="auth-intro"><p class="eyebrow">Welcome back</p><h1>Return to your <em>practice.</em></h1><p>Pick up where you left off. Your saved songs and quiet listening space are waiting.</p><div class="auth-note"><span>♫</span> A little music can change the shape of a day.</div></div><div class="auth-card"><h2>Sign in</h2><p>Enter your details to continue listening.</p><form method="POST">{% csrf_token %}{{ form|crispy }}<button class="button auth-submit" type="submit">Sign in <span>→</span></button></form><a class="auth-forgot" href="{% url 'password_reset' %}">Forgot your password?</a><div class="auth-divider"></div><p class="auth-switch">New here? <a href="{% url 'register' %}">Create a free account</a></p></div></section>
 {% endblock content %}

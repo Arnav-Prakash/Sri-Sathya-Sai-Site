@@ -1,235 +1,40 @@
 {% load static %}
-
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    {% block title %}
-    {% endblock title %}
+    {% block title %}<title>Sri Sathya Sai Bhajans</title>{% endblock title %}
+    <meta name="description" content="A calm, searchable home for Sri Sathya Sai bhajans, stotras and devotional music.">
     <link rel="icon" type="image/x-icon" href="{% static 'imgs/logo/icon-square.png' %}">
-
-    <style>
-      .loader-bg {
-        position: fixed;
-        z-index: 999999;
-        background: #fff;
-        width: 100%;
-        height: 100%;
-      }
-      .loader {
-        border: 0 solid transparent;
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-        position: absolute;
-        top: calc(50vh - 75px);
-        left: calc(50vw - 75px);
-      }
-      .loader:before, .loader:after {
-        content: '';
-        border: 1em solid #ff5733;
-        border-radius: 50%;
-        width: inherit;
-        height: inherit;
-        position: absolute;
-        top: 0;
-        left: 0;
-        animation: loader 2s linear infinite;
-        opacity: 0;
-      }
-      .loader:before {
-        animation-delay: .5s;
-      }
-      @keyframes loader {
-        0% {
-          transform: scale(0);
-          opacity: 0;
-        }
-        50% {
-          opacity: 1;
-        }
-        100% {
-          transform: scale(1);
-          opacity: 0;
-        }
-      }
-
-      body {
-        font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
-      
-      h1, h2, h3, h4, h5, h6,
-      .h1, .h2, .h3, .h4, .h5, .h6 {
-        font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
-      
-      a {
-        -webkit-transition: .3s all ease;
-        -o-transition: .3s all ease;
-        transition: .3s all ease; }
-        a, a:hover {
-          text-decoration: none !important; }
-      
-      .content {
-        height: 70vh; }
-      
-      .footer-16371 {
-        padding: 7rem 0;
-        font-family: "Poppins", sans-serif; }
-        .footer-16371 .footer-site-logo {
-          text-align: center;
-          font-size: 2rem;
-          font-weight: 900; }
-          .footer-16371 .footer-site-logo a {
-            color: #4200ff; }
-        .footer-16371 .nav-links {
-          padding: 0;
-          margin: 0; }
-          .footer-16371 .nav-links li {
-            display: inline-block; }
-            .footer-16371 .nav-links li a {
-              padding: 10px;
-              color: #000; }
-              .footer-16371 .nav-links li a:hover {
-                color: #4200ff; }
-        .footer-16371 .social h3 {
-          font-weight: bold;
-          font-size: 18px;
-          color: #000; }
-        .footer-16371 .social ul li {
-          display: inline-block; }
-          .footer-16371 .social ul li a {
-            display: inline-block;
-            padding: 10px; }
-          .footer-16371 .social ul li.in a {
-            color: #df588a; }
-          .footer-16371 .social ul li.tw a {
-            color: #15b8ff; }
-          .footer-16371 .social ul li.fb a {
-            color: #3742d0; }
-          .footer-16371 .social ul li.dr a {
-            color: #fa38c1; }
-          .footer-16371 .social ul li.pin a {
-            color: #dd4d5a; }
-        .footer-16371 .copyright {
-          color: #999999; }
-      
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script>try{if(localStorage.getItem('sai-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(error){}</script>
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    {% block extra_head %}{% endblock extra_head %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-danger fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'imgs/logo/icon-square.png' %}" alt="" width="30" height="30" class="d-inline-block align-text-top">
-            Sri Sathya Sai Bhajans
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}#about">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'all-songs' %}">All Songs</a>
-              </li>
-              {% if user.is_authenticated %}
-              {% if user.is_staff %}
-                <li class="nav-item">
-                  <a class="nav-link" href="/admin">Admin</a>
-                </li>
-              {% else %}
-              {% endif %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-              {% else %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-              {% endif %}
-            </ul>
-            <form method="get" action="/search" class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search Songs..." aria-label="Search Songs" name="query" id="query">
-              <button class="btn btn-warning" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-      </nav>
-      <div class="loader-bg">
-        <div class="loader">
-        </div>
-      </div>
-		{% for message in messages %}
-			<div class="alert alert-{{ message.tags }}" role="alert">
-				{{ message }}
-        <button type="button" class="btn-close" aria-label="Close"></button>
-			</div>
-		{% endfor %}
-        {% block content %}
-        {% endblock content %}
-        <div class="container">
-          <br>
-          <hr style="background-color: #FF0000; height: 5px; opacity: 100%;">
-        </div>
-    <footer class="footer-16371">
-        <div class="row justify-content-center">
-          <div class="col text-center">
-            <div class="footer-site-logo mb-4">
-              <img src="{% static 'imgs/logo/icon-square.png' %}" alt="" width="100" height="100" class="d-inline-block align-text-top">
-              <br>
-              <a href="{% url 'home' %}">Sri Sathya Sai Bhajans</a>
-            </div>
-            <ul class="list-unstyled nav-links mb-5">
-              <li><a href="{% url 'home' %}">Home</a></li>
-              <li><a href="{% url 'home' %}#about">About</a></li>
-              <li><a href="{% url 'all-songs' %}">All Songs</a></li>
-              <li><a href="{% url 'login' %}">Login</a></li>
-              <li><a href="{% url 'register' %}">Register</a></li>
-            </ul>
-
-            <div class="social mb-4">
-              <h3>Stay in touch</h3>
-              <ul class="list-unstyled">
-                <li class="in"><a href="mailto:help.cooldevga@gmail.com">help.cooldevga@gmail.com</a></li>
-              </ul>
-            </div>
-
-            <div class="copyright">
-              <p class="mb-0"><small>&copy; Sri Sathya Sai Bhajans. All Rights Reserved.</small></p>
-              <p class="mb-2" style="font-size: 19px"><small>Designed &amp; Developed by <img src="{% static 'imgs/logo/GAORG.jpg' %}" alt="" width="20" height="20" class="d-inline-block align-text-top rounded-circle"> <a href="https://www.youtube.com/channel/UCGFQk2c5Zpas-bkx46uPuSA" target="_blank"><u>CoolDevGA</u></a>.</small></p>
-            </div>
-
-
-          </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <div class="site-preloader" aria-label="Loading Sri Sathya Sai Bhajans" role="status"><div class="preloader-mark"><span></span><span></span><span></span></div><p>tuning the room</p></div>
+    <div class="page-noise" aria-hidden="true"></div>
+    <nav class="site-nav"><div class="nav-inner">
+      <a class="brand" href="{% url 'home' %}"><span class="brand-mark"><img src="{% static 'imgs/logo/icon-square.png' %}" alt=""></span><span><strong>Sai Bhajans</strong><small>listen with devotion</small></span></a>
+      <div class="nav-links"><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a><a href="{% url 'all-songs' %}" class="{% if request.resolver_match.url_name == 'all-songs' %}active{% endif %}">Library</a>{% if user.is_authenticated %}<a href="{% url 'favourite_list' %}" class="{% if request.resolver_match.url_name == 'favourite_list' %}active{% endif %}">Favourites</a>{% endif %}<a href="{% url 'home' %}#about">About</a></div>
+      <div class="nav-actions"><form method="get" action="{% url 'search' %}" class="nav-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Find a bhajan" aria-label="Search songs" name="query"></form><button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-sun">☼</span><span class="theme-moon">☾</span></button>{% if user.is_authenticated %}<details class="account-menu"><summary class="avatar-link" aria-label="Open account menu">{{ user.username|slice:':1'|upper }}</summary><div class="account-dropdown"><div class="account-heading"><strong>{{ user.get_full_name|default:user.username }}</strong><small>{{ user.email }}</small></div><a href="{% url 'profile' %}">Profile <span>→</span></a><a href="{% url 'favourite_list' %}">Favourites <span>♡</span></a><a href="{% url 'profile-update' %}">Edit information <span>↗</span></a><a href="{% url 'password_reset' %}">Change password <span>↗</span></a><div class="account-rule"></div><a class="account-logout" href="{% url 'logout' %}">Log out <span>↗</span></a></div></details>{% else %}<a class="nav-login" href="{% url 'login' %}">Sign in</a>{% endif %}<button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button></div>
+    </div></nav>
+    {% for message in messages %}<div class="flash-message" role="alert">{{ message }}<button type="button" aria-label="Close" onclick="this.parentElement.remove()">×</button></div>{% endfor %}
+    <main>{% block content %}{% endblock content %}</main>
+    <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><span class="brand-mark"><img src="{% static 'imgs/logo/icon-square.png' %}" alt=""></span><div><strong>Sai Bhajans</strong><p>A quiet place for the sacred sound.</p></div></div><div class="footer-links"><a href="{% url 'all-songs' %}">Browse library</a><a href="{% url 'home' %}#about">About Sai Baba</a><a href="mailto:help.cooldevga@gmail.com">Contact</a></div><p class="footer-copy">© Sri Sathya Sai Bhajans · Designed by <a href="https://www.youtube.com/channel/UCGFQk2c5Zpas-bkx46uPuSA" target="_blank" rel="noreferrer">CoolDevGA</a></p></div></footer>
     <script>
-      setTimeout(function(){
-        $('.loader-bg').fadeToggle();
-      }, 1500);
+      const menuToggle=document.querySelector('.menu-toggle'),navLinks=document.querySelector('.nav-links');
+      if(menuToggle)menuToggle.addEventListener('click',()=>{const open=navLinks.classList.toggle('is-open');menuToggle.setAttribute('aria-expanded',open)});
+      const themeToggle=document.querySelector('.theme-toggle'), savedTheme=localStorage.getItem('sai-theme');
+      if(savedTheme==='dark') document.documentElement.dataset.theme='dark';
+      const updateThemeButton=()=>{const dark=document.documentElement.dataset.theme==='dark';themeToggle?.setAttribute('aria-pressed',dark);themeToggle?.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');};
+      updateThemeButton();
+      themeToggle?.addEventListener('click',()=>{const dark=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=dark?'light':'dark';localStorage.setItem('sai-theme',dark?'light':'dark');updateThemeButton();});
+      window.addEventListener('load',()=>document.body.classList.add('is-loaded'));
     </script>
+    {% block extra_scripts %}{% endblock extra_scripts %}
   </body>
 </html>
