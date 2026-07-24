@@ -1,0 +1,43 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% block title %}Sai Bhajans workspace{% endblock %}
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .workspace-shell { max-width: 1180px; margin: 0 auto; padding: 18px 4px 42px; }
+  .workspace-hero { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; padding: 30px; border-radius: 7px 40px 7px 40px; background: linear-gradient(120deg, #07554f, #127c73); color: white; }
+  .workspace-hero h1 { margin: 0; color: white; font-size: 32px; font-weight: 700; letter-spacing: -.04em; }
+  .workspace-hero p { max-width: 520px; margin: 8px 0 0; color: #c8e6dc; font-size: 14px; }
+  .workspace-badge { padding: 9px 13px; border: 1px solid rgba(255,255,255,.3); border-radius: 20px; color: white; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .workspace-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .workspace-card { padding: 22px; border: 1px solid #dfe6df; border-radius: 5px 26px 5px 26px; background: #fff; }
+  .workspace-card h2 { margin: 0 0 7px; color: #202b2a; font-size: 19px; }
+  .workspace-card p { margin: 0 0 17px; color: #73817d; font-size: 13px; line-height: 1.55; }
+  .workspace-actions { display: grid; gap: 8px; }
+  .workspace-action { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 13px; border: 1px solid #dfe6df; border-radius: 5px; color: #07554f; background: #f6f7f3; font-size: 13px; font-weight: 700; }
+  .workspace-action:hover { border-color: #127c73; background: #e8f2ec; color: #07554f; }
+  .workspace-action small { color: #73817d; font-size: 11px; font-weight: 400; }
+  .workspace-note { margin-top: 16px; padding: 16px; border-left: 3px solid #ef765d; background: #fff7f2; color: #6d625d; font-size: 12px; line-height: 1.6; }
+  @media (max-width: 700px) { .workspace-hero { align-items: flex-start; flex-direction: column; padding: 23px; }.workspace-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+{% block content %}
+<div class="workspace-shell">
+  {% if request.user.is_superuser and not request.user.admin_profile or request.user.admin_profile.interface_mode == 'developer' %}
+    <div class="workspace-hero"><div><h1>Developer workspace</h1><p>Full control over songs, metadata, users, and the structure behind the library.</p></div><span class="workspace-badge">ADVANCED MODE</span></div>
+  {% else %}
+    <div class="workspace-hero"><div><h1>Simple workspace</h1><p>A focused place to add and update songs without the technical details getting in the way.</p></div><span class="workspace-badge">EASY MODE</span></div>
+  {% endif %}
+  <div class="workspace-grid">
+    {% for app in app_list %}
+      {% for model in app.models %}
+        <section class="workspace-card"><h2>{{ model.name }}</h2><p>{% if model.name == 'Songs' %}Add music, update details, and keep the listening library fresh.{% else %}Manage {{ model.name|lower }} records used by the site.{% endif %}</p><div class="workspace-actions"><a class="workspace-action" href="{{ model.admin_url }}">Open {{ model.name }} <span>→</span></a>{% if model.add_url %}<a class="workspace-action" href="{{ model.add_url }}">Add {{ model.name|lower }} <span>＋</span></a>{% endif %}</div></section>
+  {% endfor %}
+    {% empty %}
+      <section class="workspace-card"><h2>No workspace items yet</h2><p>Your account does not currently have access to any admin modules. Ask a developer administrator to update your permissions.</p></section>
+    {% endfor %}
+  </div>
+  {% if request.user.is_superuser and not request.user.admin_profile or request.user.admin_profile.interface_mode == 'developer' %}<div class="workspace-note">Developer tip: choose <strong>Admin workspace → Simple workspace</strong> on a staff user when you want to give them a calmer song-only admin experience.</div>{% else %}<div class="workspace-note">Need help? Use the song workspace above. The rest of the site remains available from the main site link.</div>{% endif %}
+</div>
+{% endblock %}
+*** End Patch

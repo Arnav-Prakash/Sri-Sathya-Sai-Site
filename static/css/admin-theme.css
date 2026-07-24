@@ -1,0 +1,25 @@
+html.admin-dark { color-scheme: dark; }
+html.admin-dark body, html.admin-dark .content-wrapper { background: #101918 !important; color: #e8f1eb !important; }
+html.admin-dark .main-header, html.admin-dark .main-sidebar, html.admin-dark .brand-link, html.admin-dark .navbar, html.admin-dark .card, html.admin-dark .info-box, html.admin-dark .small-box, html.admin-dark .dropdown-menu, html.admin-dark .modal-content { background: #192522 !important; color: #e8f1eb !important; border-color: #30423d !important; }
+html.admin-dark .content-header h1, html.admin-dark .card-title, html.admin-dark .card-header, html.admin-dark label, html.admin-dark th, html.admin-dark td, html.admin-dark .form-control, html.admin-dark .custom-select { color: #e8f1eb !important; }
+html.admin-dark .card-body, html.admin-dark .card-footer, html.admin-dark .table, html.admin-dark .table td, html.admin-dark .table th { border-color: #30423d !important; }
+html.admin-dark .form-control, html.admin-dark .custom-select, html.admin-dark input, html.admin-dark textarea, html.admin-dark select { background: #111b1a !important; border-color: #3b514a !important; color: #e8f1eb !important; }
+html.admin-dark .form-control:focus, html.admin-dark input:focus, html.admin-dark textarea:focus, html.admin-dark select:focus { border-color: #5ac4b2 !important; box-shadow: 0 0 0 .2rem rgba(90, 196, 178, .2) !important; }
+html.admin-dark a, html.admin-dark .nav-link, html.admin-dark .breadcrumb-item a { color: #8be0ca; }
+html.admin-dark .text-muted, html.admin-dark .help-block, html.admin-dark .helptext, html.admin-dark .small { color: #9eada7 !important; }
+html.admin-dark .table-striped tbody tr:nth-of-type(odd), html.admin-dark .list-group-item { background: #1d2a27 !important; }
+html.admin-dark .table-hover tbody tr:hover { background: #263a34 !important; }
+html.admin-dark #result_list, html.admin-dark #result_list thead, html.admin-dark #result_list tbody, html.admin-dark #result_list tr, html.admin-dark #result_list td, html.admin-dark #result_list th, html.admin-dark .results, html.admin-dark .results table, html.admin-dark .results tbody, html.admin-dark .results tr, html.admin-dark .results td, html.admin-dark .results th { background-color: #192522 !important; color: #e8f1eb !important; border-color: #30423d !important; }
+html.admin-dark #result_list tbody tr:nth-child(odd), html.admin-dark #result_list tbody tr:nth-child(even), html.admin-dark .results tbody tr:nth-child(odd), html.admin-dark .results tbody tr:nth-child(even) { background-color: #1d2a27 !important; }
+html.admin-dark #result_list tbody tr:hover, html.admin-dark .results tbody tr:hover { background-color: #263a34 !important; }
+html.admin-dark #result_list a, html.admin-dark .results a { color: #8be0ca !important; }
+html.admin-dark .workspace-card { background: #192522 !important; border-color: #30423d !important; }
+html.admin-dark .workspace-card h2 { color: #e8f1eb !important; }
+html.admin-dark .workspace-card p { color: #9eada7 !important; }
+html.admin-dark .workspace-action { background: #111b1a !important; border-color: #3b514a !important; color: #8be0ca !important; }
+html.admin-dark .workspace-action:hover { background: #263a34 !important; border-color: #5ac4b2 !important; }
+html.admin-dark .workspace-note { background: #2c2420 !important; color: #d6c3ba !important; }
+.admin-theme-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 1200; display: inline-flex; align-items: center; gap: 8px; padding: 10px 13px; border: 1px solid #dfe6df; border-radius: 22px; background: #fff; color: #07554f; box-shadow: 0 8px 22px rgba(32, 43, 42, .16); cursor: pointer; font: inherit; font-size: 12px; font-weight: 700; }
+.admin-theme-toggle:hover { border-color: #127c73; }
+html.admin-dark .admin-theme-toggle { border-color: #3b514a; background: #192522; color: #8be0ca; box-shadow: 0 8px 22px rgba(0, 0, 0, .3); }
+@media (max-width: 700px) { .admin-theme-toggle { right: 12px; bottom: 12px; } }

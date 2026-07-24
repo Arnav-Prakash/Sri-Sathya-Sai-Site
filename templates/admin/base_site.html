@@ -1,0 +1,33 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin-theme.css' %}">
+{% endblock %}
+{% block extrahead %}
+{{ block.super }}
+<script>
+  (() => {
+    const savedTheme = localStorage.getItem('sai-admin-theme');
+    if (savedTheme === 'dark') document.documentElement.classList.add('admin-dark');
+  })();
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.createElement('button');
+    const updateLabel = () => {
+      const dark = document.documentElement.classList.contains('admin-dark');
+      toggle.innerHTML = dark ? '☼ Light mode' : '☾ Dark mode';
+      toggle.setAttribute('aria-label', dark ? 'Switch admin panel to light mode' : 'Switch admin panel to dark mode');
+      toggle.setAttribute('aria-pressed', dark);
+    };
+    toggle.type = 'button';
+    toggle.className = 'admin-theme-toggle';
+    toggle.addEventListener('click', () => {
+      const dark = document.documentElement.classList.toggle('admin-dark');
+      localStorage.setItem('sai-admin-theme', dark ? 'dark' : 'light');
+      updateLabel();
+    });
+    document.body.appendChild(toggle);
+    updateLabel();
+  });
+</script>
+{% endblock %}
