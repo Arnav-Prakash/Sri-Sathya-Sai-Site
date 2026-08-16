@@ -10,29 +10,245 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <script>try{if(localStorage.getItem('sai-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(error){}</script>
+    <script>
+      (function () {
+        try {
+          const root = document.documentElement;
+          const savedTheme = localStorage.getItem('sai-theme');
+          const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const initialTheme = savedTheme === 'dark' || savedTheme === 'light'
+            ? savedTheme
+            : (systemPrefersDark ? 'dark' : 'light');
+          root.dataset.theme = initialTheme;
+        } catch (error) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
     {% block extra_head %}{% endblock extra_head %}
   </head>
   <body>
     <div class="site-preloader" aria-label="Loading Sri Sathya Sai Bhajans" role="status"><div class="preloader-mark"><span></span><span></span><span></span></div><p>tuning the room</p></div>
     <div class="page-noise" aria-hidden="true"></div>
+    <div class="ambient-layer" aria-hidden="true">
+      <span class="ambient-orb orb-one"></span>
+      <span class="ambient-orb orb-two"></span>
+      <span class="ambient-orb orb-three"></span>
+    </div>
     <nav class="site-nav"><div class="nav-inner">
-      <a class="brand" href="{% url 'home' %}"><span class="brand-mark"><img src="{% static 'imgs/logo/icon-square.png' %}" alt=""></span><span><strong>Sai Bhajans</strong><small>listen with devotion</small></span></a>
-      <div class="nav-links"><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a><a href="{% url 'all-songs' %}" class="{% if request.resolver_match.url_name == 'all-songs' %}active{% endif %}">Library</a>{% if user.is_authenticated %}<a href="{% url 'favourite_list' %}" class="{% if request.resolver_match.url_name == 'favourite_list' %}active{% endif %}">Favourites</a>{% endif %}<a href="{% url 'home' %}#about">About</a></div>
-      <div class="nav-actions"><form method="get" action="{% url 'search' %}" class="nav-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Find a bhajan" aria-label="Search songs" name="query"></form><button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-sun">☼</span><span class="theme-moon">☾</span></button>{% if user.is_authenticated %}<details class="account-menu"><summary class="avatar-link" aria-label="Open account menu">{{ user.username|slice:':1'|upper }}</summary><div class="account-dropdown"><div class="account-heading"><strong>{{ user.get_full_name|default:user.username }}</strong><small>{{ user.email }}</small></div><a href="{% url 'profile' %}">Profile <span>→</span></a><a href="{% url 'favourite_list' %}">Favourites <span>♡</span></a><a href="{% url 'profile-update' %}">Edit information <span>↗</span></a><a href="{% url 'password_reset' %}">Change password <span>↗</span></a><div class="account-rule"></div><a class="account-logout" href="{% url 'logout' %}">Log out <span>↗</span></a></div></details>{% else %}<a class="nav-login" href="{% url 'login' %}">Sign in</a>{% endif %}<button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button></div>
+      <a class="brand" href="{% url 'home' %}" aria-label="Home"><span class="brand-mark"><img src="{% static 'imgs/logo/icon-square.png' %}" alt=""></span><span class="brand-text"><strong>Sai Bhajans</strong><small>listen with devotion</small></span></a>
+      <div class="nav-links"><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a><a href="{% url 'all-songs' %}" class="{% if request.resolver_match.url_name == 'all-songs' %}active{% endif %}">Library</a>{% if user.is_authenticated %}<a href="{% url 'favourite_list' %}" class="{% if request.resolver_match.url_name == 'favourite_list' %}active{% endif %}">Favourites</a>{% endif %}<a href="{% url 'home' %}#about">About</a><a href="{% url 'contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a></div>
+      <div class="nav-actions"><form method="get" action="{% url 'search' %}" class="nav-search" role="search"><label class="nav-search-field" for="main-search"><span class="nav-search-icon" aria-hidden="true">⌕</span><input id="main-search" type="search" placeholder=" Search..." aria-label="Search songs" name="query" autocomplete="off"></label><button class="nav-search-submit" type="submit" aria-label="Search">Search</button></form><button class="nav-search-trigger" type="button" aria-label="Open search" aria-expanded="false">⌕</button><button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-sun">☼</span><span class="theme-moon">☾</span></button>{% if user.is_authenticated %}<details class="account-menu"><summary class="avatar-link" aria-label="Open account menu">{% if user.admin_profile and user.admin_profile.profile_picture %}<img src="{{ user.admin_profile.profile_picture.url }}" alt="{{ user.get_full_name|default:user.username }}">{% else %}{{ user.username|slice:':1'|upper }}{% endif %}</summary><div class="account-dropdown"><div class="account-heading"><strong>{{ user.get_full_name|default:user.username }}</strong><small>{{ user.email }}</small></div><a href="{% url 'profile' %}">Profile <span>→</span></a><a href="{% url 'favourite_list' %}">Favourites <span>♡</span></a><a href="{% url 'profile-update' %}">Edit information <span>↗</span></a><a href="{% url 'password_reset' %}">Change password <span>↗</span></a><div class="account-rule"></div><a class="account-logout" href="{% url 'logout' %}">Log out <span>↗</span></a></div></details>{% else %}<a class="nav-login" href="{% url 'login' %}">Sign in</a>{% endif %}<button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button></div>
     </div></nav>
+    <div class="search-modal" aria-hidden="true">
+      <div class="search-modal-backdrop" data-close-search="true"></div>
+      <div class="search-modal-panel" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+        <div class="search-modal-header">
+          <p class="eyebrow">Search</p>
+          <button class="search-close" type="button" aria-label="Close search">×</button>
+        </div>
+        <form method="get" action="{% url 'search' %}" class="search-modal-form">
+          <label class="search-modal-label" for="search-modal-input">Find a bhajan, raga or deity</label>
+          <div class="search-modal-input-wrap">
+            <span aria-hidden="true">⌕</span>
+            <input id="search-modal-input" type="search" name="query" autocomplete="off" placeholder="Search the library..." required>
+          </div>
+          <button class="button" type="submit">Search library</button>
+        </form>
+      </div>
+    </div>
     {% for message in messages %}<div class="flash-message" role="alert">{{ message }}<button type="button" aria-label="Close" onclick="this.parentElement.remove()">×</button></div>{% endfor %}
+    <div class="cookie-consent" id="cookieConsent" aria-live="polite" aria-label="Cookie consent">
+      <div class="cookie-copy">
+        <strong>We use cookies</strong>
+        <p>We use a small cookie to remember your theme choice and improve your browsing experience.</p>
+      </div>
+      <div class="cookie-actions">
+        <button class="button button-light" type="button" data-cookie-choice="decline">No thanks</button>
+        <button class="button" type="button" data-cookie-choice="accept">Accept</button>
+      </div>
+    </div>
     <main>{% block content %}{% endblock content %}</main>
-    <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><span class="brand-mark"><img src="{% static 'imgs/logo/icon-square.png' %}" alt=""></span><div><strong>Sai Bhajans</strong><p>A quiet place for the sacred sound.</p></div></div><div class="footer-links"><a href="{% url 'all-songs' %}">Browse library</a><a href="{% url 'home' %}#about">About Sai Baba</a><a href="mailto:help.cooldevga@gmail.com">Contact</a></div><p class="footer-copy">© Sri Sathya Sai Bhajans · Designed by <a href="https://www.youtube.com/channel/UCGFQk2c5Zpas-bkx46uPuSA" target="_blank" rel="noreferrer">CoolDevGA</a></p></div></footer>
+    <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><span class="brand-mark"><img src="{% static 'imgs/logo/icon-square.png' %}" alt=""></span><div><strong>Sai Bhajans</strong><p>A quiet place for the sacred sound.</p></div></div><div class="footer-links"><a href="{% url 'all-songs' %}">Browse library</a><a href="{% url 'home' %}#about">About Sai Baba</a><a href="{% url 'contact' %}">Contact</a></div><p class="footer-copy">Sri Sathya Sai Bhajans · Designed by <a href="https://cooldevga.github.io/gaproductions/" target="_blank" rel="noreferrer">GA Productions</a> · Refined with AI.</p></div></footer>
     <script>
       const menuToggle=document.querySelector('.menu-toggle'),navLinks=document.querySelector('.nav-links');
-      if(menuToggle)menuToggle.addEventListener('click',()=>{const open=navLinks.classList.toggle('is-open');menuToggle.setAttribute('aria-expanded',open)});
-      const themeToggle=document.querySelector('.theme-toggle'), savedTheme=localStorage.getItem('sai-theme');
-      if(savedTheme==='dark') document.documentElement.dataset.theme='dark';
-      const updateThemeButton=()=>{const dark=document.documentElement.dataset.theme==='dark';themeToggle?.setAttribute('aria-pressed',dark);themeToggle?.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');};
+      const accountMenu = document.querySelector('.account-menu');
+      const syncPopupBackground = () => {
+        const navPopupOpen = !!document.querySelector('.nav-links.is-open');
+        const accountPopupOpen = !!document.querySelector('.account-menu[open]');
+        const searchPopupOpen = !!document.querySelector('.search-modal.is-open');
+        const anyPopupOpen = navPopupOpen || accountPopupOpen || searchPopupOpen;
+
+        document.body.classList.toggle('popup-open', anyPopupOpen);
+        document.body.classList.toggle('popup-open-nav', navPopupOpen);
+        document.body.classList.toggle('popup-open-account', accountPopupOpen);
+        document.body.classList.toggle('popup-open-search', searchPopupOpen);
+      };
+
+      const closeNavPopup = () => {
+        navLinks?.classList.remove('is-open');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+        syncPopupBackground();
+      };
+
+      const closeAccountPopup = () => {
+        if (accountMenu) {
+          accountMenu.removeAttribute('open');
+        }
+        syncPopupBackground();
+      };
+
+      if(menuToggle)menuToggle.addEventListener('click',()=>{
+        const open = navLinks?.classList.contains('is-open');
+        if (open) {
+          closeNavPopup();
+        } else {
+          navLinks?.classList.add('is-open');
+          menuToggle.setAttribute('aria-expanded', 'true');
+          syncPopupBackground();
+        }
+      });
+
+      accountMenu?.addEventListener('toggle', () => {
+        syncPopupBackground();
+      });
+
+      document.addEventListener('click', (event) => {
+        const clickedNavControl = menuToggle && menuToggle.contains(event.target);
+        const clickedInsideNav = navLinks && navLinks.contains(event.target);
+        if (!clickedNavControl && !clickedInsideNav && navLinks?.classList.contains('is-open')) {
+          closeNavPopup();
+        }
+
+        const clickedInsideAccount = accountMenu && accountMenu.contains(event.target);
+        if (accountMenu && !clickedInsideAccount && accountMenu.hasAttribute('open')) {
+          closeAccountPopup();
+        }
+      });
+
+      const navInner=document.querySelector('.nav-inner');
+      const searchForm=document.querySelector('.nav-search');
+      const searchInput=document.querySelector('#main-search');
+      const syncSearchState = () => {
+        const active = Boolean(searchInput && searchInput.value.trim()) || searchForm?.classList.contains('is-open');
+        searchForm?.classList.toggle('is-open', active);
+        navInner?.classList.toggle('search-open', active);
+      };
+      const activateSearch=()=>syncSearchState();
+      const deactivateSearch=()=>{ if(searchInput && !searchInput.value.trim()) { searchForm?.classList.remove('is-open'); navInner?.classList.remove('search-open'); } };
+      searchInput?.addEventListener('focus', activateSearch);
+      searchInput?.addEventListener('input', syncSearchState);
+      searchInput?.addEventListener('blur', deactivateSearch);
+
+      const searchModal=document.querySelector('.search-modal');
+      const searchTrigger=document.querySelector('.nav-search-trigger');
+      const closeSearchModal=()=>{
+        searchModal?.setAttribute('aria-hidden','true');
+        searchModal?.classList.remove('is-open');
+        searchTrigger?.setAttribute('aria-expanded','false');
+        syncPopupBackground();
+      };
+      const openSearchModal=()=>{
+        searchModal?.setAttribute('aria-hidden','false');
+        searchModal?.classList.add('is-open');
+        searchTrigger?.setAttribute('aria-expanded','true');
+        syncPopupBackground();
+        setTimeout(()=>document.querySelector('#search-modal-input')?.focus(), 50);
+      };
+      searchTrigger?.addEventListener('click',()=>{
+        const isOpen = searchModal?.classList.contains('is-open');
+        if (isOpen) closeSearchModal(); else openSearchModal();
+      });
+      searchModal?.addEventListener('click',(event)=>{
+        if (event.target.closest('[data-close-search="true"]') || event.target.closest('.search-close')) {
+          closeSearchModal();
+        }
+      });
+      document.addEventListener('keydown',(event)=>{
+        if (event.key === 'Escape' && searchModal?.classList.contains('is-open')) closeSearchModal();
+      });
+
+      const cookieConsent = document.getElementById('cookieConsent');
+      const cookieKey = 'sai-cookie-preference';
+      const cookieReminderKey = 'sai-cookie-reminder';
+
+      const getCookieReminderDate = () => {
+        const stored = localStorage.getItem(cookieReminderKey);
+        return stored ? new Date(Number(stored)) : null;
+      };
+
+      const shouldShowCookieConsent = () => {
+        const stored = localStorage.getItem(cookieKey);
+        if (!stored) return true;
+
+        const reminderDate = getCookieReminderDate();
+        if (!reminderDate) return true;
+
+        return new Date() >= reminderDate;
+      };
+
+      if (cookieConsent && shouldShowCookieConsent()) {
+        cookieConsent.classList.add('is-visible');
+      }
+
+      cookieConsent?.querySelectorAll('[data-cookie-choice]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const choice = button.dataset.cookieChoice;
+          const now = Date.now();
+          const reminderMs = choice === 'decline' ? 7 * 24 * 60 * 60 * 1000 : 60 * 24 * 60 * 60 * 1000;
+
+          localStorage.setItem(cookieKey, choice);
+          localStorage.setItem(cookieReminderKey, String(now + reminderMs));
+          cookieConsent.classList.remove('is-visible');
+        });
+      });
+
+      const themeToggle=document.querySelector('.theme-toggle');
+      const updateThemeButton=()=>{
+        const dark=document.documentElement.dataset.theme==='dark';
+        themeToggle?.setAttribute('aria-pressed', dark);
+        themeToggle?.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+      };
+
+      const setTheme=(nextTheme)=>{
+        document.documentElement.dataset.theme=nextTheme;
+        try { localStorage.setItem('sai-theme', nextTheme); } catch (error) {}
+        updateThemeButton();
+      };
+
+      const ratingStars = document.querySelector('.rating-stars');
+      if (ratingStars) {
+        const average = Number(ratingStars.dataset.average || 0);
+        const percent = Math.max(0, Math.min(100, (average / 5) * 100));
+        ratingStars.style.setProperty('--percent', `${percent}%`);
+      }
+
+      const ambientOrbs = document.querySelectorAll('.ambient-orb');
+      const animateAmbient = (event) => {
+        if (!ambientOrbs.length) return;
+        const { innerWidth, innerHeight } = window;
+        const x = (event.clientX / innerWidth - 0.5) * 12;
+        const y = (event.clientY / innerHeight - 0.5) * 12;
+        const themeFactor = document.documentElement.dataset.theme === 'dark' ? 1 : 0.65;
+        ambientOrbs.forEach((orb, index) => {
+          const intensity = ((index + 1) * 0.5) * themeFactor;
+          orb.style.transform = `translate(${x * intensity}px, ${y * intensity}px)`;
+          orb.style.opacity = themeFactor > 0.8 ? '.7' : '.34';
+        });
+      };
+
+      window.addEventListener('pointermove', animateAmbient);
+      window.addEventListener('pointerleave', () => {
+        ambientOrbs.forEach((orb) => orb.style.transform = 'translate(0, 0)');
+      });
+
       updateThemeButton();
-      themeToggle?.addEventListener('click',()=>{const dark=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=dark?'light':'dark';localStorage.setItem('sai-theme',dark?'light':'dark');updateThemeButton();});
+      themeToggle?.addEventListener('click',()=>{
+        const dark=document.documentElement.dataset.theme==='dark';
+        setTheme(dark ? 'light' : 'dark');
+      });
+
       window.addEventListener('load',()=>document.body.classList.add('is-loaded'));
     </script>
     {% block extra_scripts %}{% endblock extra_scripts %}

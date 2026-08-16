@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Song, SortFilter, God, Raaga
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils import timezone
+from .models import Song, SortFilter, God, Raaga, ContactMessage
 
 
 def has_developer_workspace(request):
@@ -79,3 +82,37 @@ class RaagaAdmin(DeveloperOnlyAdmin):
     list_display = ('name', 'description')
 
 admin.site.register(Raaga, RaagaAdmin)
+
+
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('name', 'email', 'subject', 'message')
+    readonly_fields = ('created_at', 'replied_at')
+    actions = ['mark_as_replied']
+
+    def mark_as_replied(self, request, queryset):
+        queryset.update(status=ContactMessage.STATUS_REPLIED, replied_at=timezone.now())
+
+    mark_as_replied.short_description = 'Mark selected messages as replied'
+
+    def response_change(self, request, obj):
+        if '_reply' in request.POST:
+            reply_message = request.POST.get('reply_message', '').strip()
+            if reply_message:
+                send_mail(
+                    subject=f'Re: {obj.subject}',
+                    message=reply_message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[obj.email],
+                    fail_silently=False,
+                )
+                obj.status = ContactMessage.STATUS_REPLIED
+                obj.replied_at = timezone.now()
+                obj.save()
+                self.message_user(request, f'Reply sent to {obj.email}.')
+                return None
+        return super().response_change(request, obj)
+
+
+admin.site.register(ContactMessage, ContactMessageAdmin)

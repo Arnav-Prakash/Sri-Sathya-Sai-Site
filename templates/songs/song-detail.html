@@ -2,5 +2,48 @@
 {% load static %}
 {% block title %}<title>{{ object.name }} | Sri Sathya Sai Bhajans</title>{% endblock title %}
 {% block content %}
-<section class="song-detail"><a class="back-link" href="{% url 'all-songs' %}">← Back to library</a><div class="song-detail-grid"><div class="detail-art"><img src="{{ object.god.image.url }}" alt="{{ object.god.name }}"><span>{{ object.god.name }}</span></div><div class="detail-copy"><p class="eyebrow">Now listening</p><h1>{{ object.name }}</h1><p class="detail-description">{{ object.description }}</p><div class="detail-tags"><span>{{ object.Raaga.name }}</span><span>{{ object.sort_filter.name }}</span></div><div class="audio-panel"><div class="audio-heading"><span class="play-symbol">♫</span><div><strong>Play this bhajan</strong><small>Take a moment to listen</small></div></div><audio controls preload="metadata"><source src="{{ object.audio_file.url }}" type="audio/mpeg">Your browser does not support audio playback.</audio></div><div class="detail-actions">{% if user.is_authenticated %}<a class="button button-light" href="{% url 'favourite-add' object.id %}">{% if user in object.favourite.all %}Remove from favourites ♡{% else %}Save to favourites ♡{% endif %}</a>{% endif %}{% if object.lyrics_pdf %}<a class="button" href="{{ object.lyrics_pdf.url }}" target="_blank" rel="noreferrer">Read lyrics ↗</a><a class="button button-light" href="{{ object.lyrics_pdf.url }}" download>Download PDF ↓</a>{% endif %}</div></div></div></section>
+<section class="song-detail"><a class="back-link" href="{% url 'all-songs' %}">← Back to library</a><div class="song-detail-grid"><div class="detail-art"><img src="{{ object.god.image.url }}" alt="{{ object.god.name }}"><span>{{ object.god.name }}</span></div><div class="detail-copy"><p class="eyebrow">Now listening</p><h1>{{ object.name }}</h1><p class="detail-description">{{ object.description }}</p><div class="detail-tags"><span>{{ object.Raaga.name }}</span><span>{{ object.sort_filter.name }}</span></div><div class="rating-summary"><div class="rating-stars" data-average="{{ average_rating|floatformat:1 }}" aria-label="Average rating {{ average_rating|floatformat:1 }} out of 5"><span class="stars-base">★★★★★</span><span class="stars-fill">★★★★★</span></div><strong>{{ average_rating|floatformat:1 }}</strong><small>average rating</small></div><div class="audio-panel"><div class="audio-heading"><span class="play-symbol">♫</span><div><strong>Play this bhajan</strong><small>Take a moment to listen</small></div></div><audio controls preload="metadata"><source src="{{ object.audio_file.url }}" type="audio/mpeg">Your browser does not support audio playback.</audio></div><div class="detail-actions">{% if user.is_authenticated %}<a class="button button-light" href="{% url 'favourite-add' object.id %}">{% if user in object.favourite.all %}Remove from favourites ♡{% else %}Save to favourites ♡{% endif %}</a>{% endif %}{% if object.lyrics_pdf %}<a class="button" href="{{ object.lyrics_pdf.url }}" target="_blank" rel="noreferrer">Read lyrics ↗</a><a class="button button-light" href="{{ object.lyrics_pdf.url }}" download>Download PDF ↓</a>{% endif %}</div></div></div>
+
+  <div class="reviews-panel">
+    <div class="reviews-header">
+      <h2>Reviews</h2>
+      <span>{{ reviews|length }} review{{ reviews|length|pluralize }}</span>
+    </div>
+
+    {% if user.is_authenticated %}
+      <form class="review-form" method="post" action="{% url 'song-review' object.pk %}">
+        {% csrf_token %}
+        <div class="field-row">
+          <div class="field-group">
+            <label for="id_rating">Rating</label>
+            {{ review_form.rating }}
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="id_comment">Your review</label>
+          {{ review_form.comment }}
+        </div>
+        <button class="button" type="submit">Submit review</button>
+      </form>
+    {% else %}
+      <p class="review-signin">Please <a href="{% url 'login' %}">sign in</a> to leave a rating.</p>
+    {% endif %}
+
+    {% if reviews %}
+      <div class="review-list">
+        {% for review in reviews %}
+          <article class="review-item">
+            <div class="review-topline">
+              <strong>{{ review.user.get_full_name|default:review.user.username }}</strong>
+              <span>{{ review.rating }}/5</span>
+            </div>
+            <p>{{ review.comment|default:'No written comment provided.' }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty-review">No reviews yet. Be the first to share a thought.</p>
+    {% endif %}
+  </div>
+</section>
 {% endblock content %}

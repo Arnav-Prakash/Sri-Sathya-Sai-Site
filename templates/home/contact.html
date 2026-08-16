@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}<title>Contact | Sri Sathya Sai Bhajans</title>{% endblock title %}
+{% block content %}
+<section class="contact-page">
+  <div class="contact-panel">
+    <div class="contact-copy">
+      <p class="eyebrow">Get in touch</p>
+      <h1>Contact the team</h1>
+      <p>Have a question, suggestion, or idea for the library? Send a message and we’ll get back to you as soon as possible.</p>
+      <ul>
+        <li>Song recommendations and library updates</li>
+        <li>Feedback on the experience</li>
+        <li>Questions about devotional music and resources</li>
+      </ul>
+    </div>
+    <form class="contact-form" method="post">
+      {% csrf_token %}
+      <div class="field-row">
+        <div class="field-group">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" required>
+        </div>
+        <div class="field-group">
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="subject">Subject</label>
+        <input id="subject" name="subject" type="text" placeholder="How can we help?" required>
+      </div>
+      <div class="field-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="6" placeholder="Write your message here..." required></textarea>
+      </div>
+      <button class="button" type="submit">Send message</button>
+    </form>
+  </div>
+</section>
+{% endblock content %}

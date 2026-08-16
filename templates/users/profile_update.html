@@ -2,5 +2,18 @@
 {% load crispy_forms_tags %}
 {% block title %}<title>Edit profile | Sri Sathya Sai Bhajans</title>{% endblock title %}
 {% block content %}
-<section class="account-edit-page"><div class="auth-card"><p class="eyebrow">Your details</p><h2>Edit information</h2><p>Keep your account details current so your listening space feels like yours.</p><form method="POST">{% csrf_token %}{{ u_form|crispy }}<button class="button auth-submit" type="submit">Save changes <span>→</span></button></form><a href="{% url 'profile' %}">← Back to profile</a></div></section>
+<section class="account-edit-page">
+  <div class="auth-card">
+    <p class="eyebrow">Your details</p>
+    <h2>Edit information</h2>
+    <p>Keep your account details current so your listening space feels like yours.</p>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ u_form|crispy }}
+      {{ p_form|crispy }}
+      <button class="button auth-submit" type="submit">Save changes <span>→</span></button>
+    </form>
+    <a href="{% url 'profile' %}">← Back to profile</a>
+  </div>
+</section>
 {% endblock content %}
