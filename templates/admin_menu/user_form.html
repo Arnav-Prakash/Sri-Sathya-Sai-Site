@@ -1,0 +1,27 @@
+{% extends 'admin_menu/base_admin.html' %}
+{% block title %}<title>Edit User</title>{% endblock title %}
+
+{% block breadcrumbs %}
+  <a href="{% url 'admin_menu' %}">Admin</a> / <a href="{% url 'mod_users_list' %}">Users</a> / <span>Edit</span>
+{% endblock breadcrumbs %}
+
+{% block admin_content %}
+  <div class="auth-card">
+    <h2>Edit User</h2>
+    <form method="post">{% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="form-row">
+        <label for="id_is_active">Active</label>
+        {{ form.is_active }}
+      </div>
+      <div class="form-row">
+        <label for="id_is_staff">Staff</label>
+        {{ form.is_staff }}
+      </div>
+      <div class="form-actions">
+        <button class="button" type="submit">Save</button>
+        <a class="button button-light" href="{% url 'mod_users_list' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock admin_content %}

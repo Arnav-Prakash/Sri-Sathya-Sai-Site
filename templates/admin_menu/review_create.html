@@ -1,0 +1,40 @@
+{% extends 'admin_menu/base_admin.html' %}
+{% block title %}<title>Create Review</title>{% endblock title %}
+
+{% block breadcrumbs %}
+  <a href="{% url 'admin_menu' %}">Admin</a> / <a href="{% url 'mod_reviews_list' %}">Reviews</a> / <span>Create</span>
+{% endblock breadcrumbs %}
+
+{% block admin_content %}
+  <div class="auth-card">
+    <h2>Create Review</h2>
+    <form method="post" id="review-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="form-row">
+        <label for="id_song">Song</label>
+        {{ form.song.errors }}
+        {{ form.song }}
+      </div>
+      <div class="form-row">
+        <label for="id_user">User</label>
+        {{ form.user.errors }}
+        {{ form.user }}
+      </div>
+      <div class="form-row">
+        <label for="id_rating">Rating</label>
+        {{ form.rating.errors }}
+        {{ form.rating }}
+      </div>
+      <div class="form-row">
+        <label for="id_comment">Comment</label>
+        {{ form.comment.errors }}
+        {{ form.comment }}
+      </div>
+      <div class="form-actions">
+        <button class="button" type="submit">Create</button>
+        <a class="button button-light" href="{% url 'mod_reviews_list' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock admin_content %}

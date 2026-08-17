@@ -1,0 +1,76 @@
+{% extends 'admin_menu/base_admin.html' %}
+{% load static %}
+
+{% block title %}<title>Admin Menu - Sai Bhajans</title>{% endblock title %}
+
+{% block breadcrumbs %}
+  <a href="{% url 'home' %}">Home</a> / <span>Admin</span>
+{% endblock breadcrumbs %}
+
+{% block admin_content %}
+  <section class="admin-dashboard">
+    <header class="admin-header">
+      <h1>{% if level == 'advanced' %}Administrator Console{% else %}Moderator Console{% endif %}</h1>
+      <p class="muted">Quick access to common management actions — styled to match the site.</p>
+    </header>
+    <div class="admin-grid">
+      <div class="admin-card">
+        <h3>Songs</h3>
+        <p>Manage the library — add, edit or remove songs.</p>
+        <div class="card-actions">
+          <a class="button" href="{% url 'all-songs' %}">View Library</a>
+          <a class="button button-light" href="{% url 'mod_songs_list' %}">Manage Songs</a>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h3>Reviews</h3>
+        <p>View and moderate song reviews and feedback.</p>
+        <div class="card-actions">
+          <a class="button" href="{% url 'all-songs' %}?filter=reviews">Search Reviews</a>
+          <a class="button button-light" href="{% url 'mod_reviews_list' %}">Manage Reviews</a>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h3>Users</h3>
+        <p>Manage user accounts and profiles.</p>
+        <div class="card-actions">
+          <a class="button" href="{% url 'profile' %}">My Profile</a>
+          <a class="button button-light" href="{% url 'mod_users_list' %}">Manage Users</a>
+        </div>
+      </div>
+
+      {% if level == 'advanced' %}
+      <div class="admin-card">
+        <h3>Settings</h3>
+        <p>Site, media and advanced configuration.</p>
+        <div class="card-actions">
+          <a class="button" href="/admin/">Open Django Admin</a>
+          <a class="button button-light" href="/admin/sites/site/">Site settings</a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="admin-stats">
+      <div class="stat">Songs: <strong>{{ song_count }}</strong></div>
+      <div class="stat">Users: <strong>{{ user_count }}</strong></div>
+      <div class="stat">Reviews: <strong>{{ review_count }}</strong></div>
+    </div>
+  </section>
+
+  <style>
+  .admin-dashboard { padding: 18px 0; }
+  .admin-header h1 { margin: 0 0 8px; font-size: 28px; }
+  .admin-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-top:18px; }
+  .admin-card { background: var(--glass-bg); border-radius:12px; padding:18px; box-shadow:var(--shadow); border:1px solid var(--glass-border); color:var(--ink); }
+  .card-actions { display:flex; gap:8px; margin-top:12px; }
+  .card-actions .button { text-decoration:none; padding:8px 12px; border-radius:8px; }
+  .card-actions .button-light { background:transparent; border:1px solid var(--glass-border); }
+  .admin-stats { display:flex; gap:24px; margin-top:22px; flex-wrap:wrap; }
+  .stat { background:transparent; padding:8px 12px; border-radius:8px; color:var(--muted); }
+  @media (max-width:600px){ .admin-header h1{font-size:20px} }
+  </style>
+
+{% endblock admin_content %}

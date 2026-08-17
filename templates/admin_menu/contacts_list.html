@@ -1,0 +1,177 @@
+{% extends 'admin_menu/base_admin.html' %}
+
+{% block title %}<title>Contact Messages</title>{% endblock title %}
+
+{% block breadcrumbs %}
+  <a href="{% url 'admin_menu' %}">Admin</a> / <a href="{% url 'mod_contacts_list' %}">Contacts</a>
+{% endblock breadcrumbs %}
+
+{% block admin_content %}
+  <div class="admin-content">
+    <h2>Contact Messages</h2>
+    <div class="table-actions">
+      <a class="button" href="{% url 'admin_menu' %}">Back</a>
+    </div>
+    <div class="table-wrap">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Received</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for c in contacts %}
+        <tr>
+          <td data-label="ID">{{ c.id }}</td>
+          <td data-label="Name">{{ c.name }}</td>
+          <td data-label="Email">{{ c.email }}</td>
+          <td data-label="Subject">{{ c.subject }}</td>
+          <td data-label="Message">
+            <button type="button" class="button button-light" data-id="{{ c.id }}" data-name="{{ c.name }}" data-email="{{ c.email }}" data-subject="{{ c.subject }}" data-message="{{ c.message|escapejs }}" onclick="openMessageModal(this)">Read</button>
+          </td>
+          <td data-label="Status">{{ c.get_status_display }}</td>
+          <td data-label="Received">{{ c.created_at|date:"Y-m-d H:i" }}</td>
+          <td data-label="Actions">
+            <button class="button" data-id="{{ c.id }}" data-email="{{ c.email }}" data-name="{{ c.name }}" data-subject="{{ c.subject }}" data-message="{{ c.message|escapejs }}" onclick="openReplyModal(this)">Reply</button>
+            {% if c.status != 'replied' %}
+              <form method="post" action="{% url 'mod_contact_mark_replied' c.id %}" style="display:inline">{% csrf_token %}<button class="button button-light" type="submit">Mark Replied</button></form>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8">No contact messages.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <style>
+      /* Floating centered modal for viewing messages */
+      .floating-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); z-index: 1200; }
+      .floating-modal.is-open { display: flex; }
+      .floating-modal .modal-panel { background: var(--paper); border-radius: 12px; padding: 18px; width: min(860px, 96%); max-height: 88vh; overflow: auto; box-shadow: var(--shadow); }
+      .floating-modal .modal-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+      .floating-modal .modal-body { margin-top:12px; white-space: pre-wrap; }
+      @media (max-width: 700px){
+        .floating-modal { align-items: center; }
+        .floating-modal .modal-panel { width: 100%; height: 100%; max-height: none; border-radius: 0; padding: 16px; box-sizing: border-box; }
+      }
+    </style>
+
+    <!-- Reply modal -->
+    <div id="reply-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+      <div style="background:var(--paper); padding:18px; border-radius:10px; width:min(760px,95%);">
+        <h3>Reply to <span id="reply-to-name"></span> &lt;<span id="reply-to-email"></span>&gt;</h3>
+        <div class="form-row">
+          <label>Subject</label>
+          <input id="reply-subject" type="text" />
+        </div>
+        <div class="form-row">
+          <label>Message</label>
+          <textarea id="reply-body"></textarea>
+        </div>
+        <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+          <button class="button" id="open-mail">Open Mail App</button>
+          <button class="button button-light" id="close-modal">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating message viewer (centered popup) -->
+    <div id="view-message-modal" class="floating-modal" aria-hidden="true">
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="view-msg-subject">
+        <div class="modal-header">
+          <div>
+            <h3 id="view-msg-subject" style="margin:0"></h3>
+            <div style="color:var(--muted); font-size:0.95rem;">From: <span id="view-msg-name"></span> &lt;<span id="view-msg-email"></span>&gt;</div>
+          </div>
+          <div>
+            <button class="button button-light" id="view-close">Close</button>
+          </div>
+        </div>
+        <div id="view-msg-body" class="modal-body" style="font-size:1rem;"></div>
+        <div style="margin-top:18px; display:flex; justify-content:flex-end; gap:8px;">
+          <button class="button" id="view-reply">Reply</button>
+          <button class="button button-light" id="view-close-2">Close</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function openReplyModal(btn){
+      const id = btn.getAttribute('data-id');
+      const email = btn.getAttribute('data-email');
+      const name = btn.getAttribute('data-name');
+      const subject = btn.getAttribute('data-subject') || '';
+      const message = btn.getAttribute('data-message') || '';
+      document.getElementById('reply-to-name').textContent = name;
+      document.getElementById('reply-to-email').textContent = email;
+      document.getElementById('reply-subject').value = 'Re: ' + subject;
+      const boilerplate = `Dear ${name},\n\nThank you for contacting us.\n\n`; 
+      document.getElementById('reply-body').value = boilerplate + '\n\n' + message;
+      const modal = document.getElementById('reply-modal');
+      modal.style.display = 'flex';
+
+      document.getElementById('open-mail').onclick = function(e){
+        e.preventDefault();
+        const sub = encodeURIComponent(document.getElementById('reply-subject').value);
+        const body = encodeURIComponent(document.getElementById('reply-body').value);
+        window.location.href = `mailto:${email}?subject=${sub}&body=${body}`;
+      };
+
+      document.getElementById('close-modal').onclick = function(e){
+        e.preventDefault();
+        modal.style.display = 'none';
+      };
+    }
+
+    function closeMessageModal(modal){
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    let _currentContact = null;
+    function openMessageModal(btn){
+      const name = btn.getAttribute('data-name');
+      const email = btn.getAttribute('data-email');
+      const subject = btn.getAttribute('data-subject') || '';
+      const message = btn.getAttribute('data-message') || '';
+      document.getElementById('view-msg-subject').textContent = subject;
+      document.getElementById('view-msg-name').textContent = name;
+      document.getElementById('view-msg-email').textContent = email;
+      document.getElementById('view-msg-body').textContent = message;
+      _currentContact = { name, email, subject, message };
+      const modal = document.getElementById('view-message-modal');
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      // close handlers
+      document.querySelectorAll('#view-message-modal .modal-panel, #view-message-modal .modal-panel *').forEach(()=>{});
+      document.getElementById('view-close').onclick = function(e){ e.preventDefault(); closeMessageModal(modal); };
+      document.getElementById('view-close-2').onclick = function(e){ e.preventDefault(); closeMessageModal(modal); };
+      document.getElementById('view-reply').onclick = function(e){ e.preventDefault(); closeMessageModal(modal); if (_currentContact) openReplyModalFromData(_currentContact); };
+      // backdrop click closes
+      document.getElementById('view-message-modal').onclick = function(e){ if (e.target.id === 'view-message-modal') closeMessageModal(modal); };
+    }
+
+    function openReplyModalFromData(contact){
+      const { name, email, subject, message } = contact;
+      document.getElementById('reply-to-name').textContent = name;
+      document.getElementById('reply-to-email').textContent = email;
+      document.getElementById('reply-subject').value = 'Re: ' + subject;
+      const boilerplate = `Dear ${name},\n\nThank you for contacting us.\n\n`;
+      document.getElementById('reply-body').value = boilerplate + '\n\n' + message;
+      document.getElementById('reply-modal').style.display = 'flex';
+      document.getElementById('open-mail').onclick = function(e){ e.preventDefault(); const sub = encodeURIComponent(document.getElementById('reply-subject').value); const body = encodeURIComponent(document.getElementById('reply-body').value); window.location.href = `mailto:${email}?subject=${sub}&body=${body}`; };
+      document.getElementById('close-modal').onclick = function(e){ e.preventDefault(); document.getElementById('reply-modal').style.display = 'none'; };
+    }
+  </script>
+
+{% endblock admin_content %}

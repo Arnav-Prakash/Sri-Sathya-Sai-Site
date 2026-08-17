@@ -38,8 +38,56 @@
     </div>
     <nav class="site-nav"><div class="nav-inner">
       <a class="brand" href="{% url 'home' %}" aria-label="Home"><span class="brand-mark"><img src="{% static 'imgs/logo/icon-square.png' %}" alt=""></span><span class="brand-text"><strong>Sai Bhajans</strong><small>listen with devotion</small></span></a>
-      <div class="nav-links"><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a><a href="{% url 'all-songs' %}" class="{% if request.resolver_match.url_name == 'all-songs' %}active{% endif %}">Library</a>{% if user.is_authenticated %}<a href="{% url 'favourite_list' %}" class="{% if request.resolver_match.url_name == 'favourite_list' %}active{% endif %}">Favourites</a>{% endif %}<a href="{% url 'home' %}#about">About</a><a href="{% url 'contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a></div>
-      <div class="nav-actions"><form method="get" action="{% url 'search' %}" class="nav-search" role="search"><label class="nav-search-field" for="main-search"><span class="nav-search-icon" aria-hidden="true">⌕</span><input id="main-search" type="search" placeholder=" Search..." aria-label="Search songs" name="query" autocomplete="off"></label><button class="nav-search-submit" type="submit" aria-label="Search">Search</button></form><button class="nav-search-trigger" type="button" aria-label="Open search" aria-expanded="false">⌕</button><button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-sun">☼</span><span class="theme-moon">☾</span></button>{% if user.is_authenticated %}<details class="account-menu"><summary class="avatar-link" aria-label="Open account menu">{% if user.admin_profile and user.admin_profile.profile_picture %}<img src="{{ user.admin_profile.profile_picture.url }}" alt="{{ user.get_full_name|default:user.username }}">{% else %}{{ user.username|slice:':1'|upper }}{% endif %}</summary><div class="account-dropdown"><div class="account-heading"><strong>{{ user.get_full_name|default:user.username }}</strong><small>{{ user.email }}</small></div><a href="{% url 'profile' %}">Profile <span>→</span></a><a href="{% url 'favourite_list' %}">Favourites <span>♡</span></a><a href="{% url 'profile-update' %}">Edit information <span>↗</span></a><a href="{% url 'password_reset' %}">Change password <span>↗</span></a><div class="account-rule"></div><a class="account-logout" href="{% url 'logout' %}">Log out <span>↗</span></a></div></details>{% else %}<a class="nav-login" href="{% url 'login' %}">Sign in</a>{% endif %}<button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button></div>
+      <div class="nav-links">
+        <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+        <a href="{% url 'all-songs' %}" class="{% if request.resolver_match.url_name == 'all-songs' %}active{% endif %}">Library</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'favourite_list' %}" class="{% if request.resolver_match.url_name == 'favourite_list' %}active{% endif %}">Favourites</a>
+        {% endif %}
+        {% if admin_menu_access %}
+          <a href="{% url 'admin_menu' %}" class="admin-menu-link">{% if admin_menu_level == 'advanced' %}Admin{% else %}Moderation{% endif %}</a>
+        {% endif %}
+        {% if not user.is_authenticated %}
+          <a href="{% url 'login' %}" class="nav-login-inline">Sign in</a>
+        {% endif %}
+        <a href="{% url 'home' %}#about">About</a>
+        <a href="{% url 'contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
+      </div>
+
+      <div class="nav-actions">
+        <form method="get" action="{% url 'search' %}" class="nav-search" role="search">
+          <label class="nav-search-field" for="main-search"><span class="nav-search-icon" aria-hidden="true">⌕</span><input id="main-search" type="search" placeholder=" Search..." aria-label="Search songs" name="query" autocomplete="off"></label>
+          <button class="nav-search-submit" type="submit" aria-label="Search">Search</button>
+        </form>
+        <button class="nav-search-trigger" type="button" aria-label="Open search" aria-expanded="false">⌕</button>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-sun">☼</span><span class="theme-moon">☾</span></button>
+        {% if user.is_authenticated %}
+          <details class="account-menu">
+            <summary class="avatar-link" aria-label="Open account menu">
+              {% if user.admin_profile and user.admin_profile.profile_picture %}
+                <img src="{{ user.admin_profile.profile_picture.url }}" alt="{{ user.get_full_name|default:user.username }}">
+              {% else %}
+                {{ user.username|slice:':1'|upper }}
+              {% endif %}
+            </summary>
+            <div class="account-dropdown">
+              <div class="account-heading"><strong>{{ user.get_full_name|default:user.username }}</strong><small>{{ user.email }}</small></div>
+              <a href="{% url 'profile' %}">Profile <span>→</span></a>
+              <a href="{% url 'favourite_list' %}">Favourites <span>♡</span></a>
+              <a href="{% url 'profile-update' %}">Edit information <span>↗</span></a>
+              <a href="{% url 'password_reset' %}">Change password <span>↗</span></a>
+              <div class="account-rule"></div>
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="account-logout" type="submit">Log out <span>↗</span></button>
+              </form>
+            </div>
+          </details>
+        {% else %}
+          <a class="nav-login" href="{% url 'login' %}">Sign in</a>
+        {% endif %}
+        <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      </div>
     </div></nav>
     <div class="search-modal" aria-hidden="true">
       <div class="search-modal-backdrop" data-close-search="true"></div>

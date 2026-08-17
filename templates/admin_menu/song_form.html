@@ -1,0 +1,65 @@
+{% extends 'admin_menu/base_admin.html' %}
+{% block title %}<title>Edit Song</title>{% endblock title %}
+
+{% block breadcrumbs %}
+  <a href="{% url 'admin_menu' %}">Admin</a> / <a href="{% url 'mod_songs_list' %}">Songs</a> / <span>Edit</span>
+{% endblock breadcrumbs %}
+
+{% block admin_content %}
+  <div class="auth-card">
+    <h2>Edit Song</h2>
+    <form method="post" enctype="multipart/form-data" id="song-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="form-row">
+        <label for="id_name">Name</label>
+        {{ form.name.errors }}
+        {{ form.name }}
+      </div>
+      <div class="form-row">
+        <label for="id_description">Description</label>
+        {{ form.description.errors }}
+        {{ form.description }}
+      </div>
+      <div class="form-row two-up">
+        <div>
+          <label for="id_Raaga">Raaga</label>
+          {{ form.Raaga }}
+        </div>
+        <div>
+          <label for="id_sort_filter">Sort Filter</label>
+          {{ form.sort_filter }}
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="id_god">Deity</label>
+        {{ form.god }}
+      </div>
+      <div class="form-row">
+        <label for="id_audio_file">Audio file</label>
+        {{ form.audio_file }}
+        <div id="audio-preview"></div>
+      </div>
+      <div class="form-row">
+        <label for="id_lyrics_pdf">Lyrics PDF</label>
+        {{ form.lyrics_pdf }}
+      </div>
+      <div class="form-actions">
+        <button class="button" type="submit">Save</button>
+        <a class="button button-light" href="{% url 'mod_songs_list' %}">Cancel</a>
+      </div>
+    </form>
+    <script>
+      (function(){
+        const audioInput = document.querySelector('#id_audio_file');
+        const preview = document.getElementById('audio-preview');
+        if (audioInput) audioInput.addEventListener('change', (e)=>{
+          const file = e.target.files[0];
+          if (!file) { preview.innerHTML = ''; return; }
+          const url = URL.createObjectURL(file);
+          preview.innerHTML = `<audio controls src="${url}"></audio><p>${file.name}</p>`;
+        });
+      })();
+    </script>
+  </div>
+{% endblock admin_content %}

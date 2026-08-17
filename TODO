@@ -50,16 +50,19 @@ Todo:
   [] Add a feature to allow users to receive notifications when new songs are added to the website or when their favorite songs are updated.
   [] Add a feature to allow users to share their favorite songs and playlists with other users on the website, as well as on social media platforms.
   [x] Add Cookie Consent Popup
-  [] Check working of contact form and make sure it is working properly and sending emails to the admin email address.
+  [x] Check working of contact form and make sure it is working properly and sending emails to the admin email address.
   [] Add Privacy Policy Page
   [] Add Terms and Conditions Page
-  [] Make a redesigned, custom and simpler admin menu:
-    [] Simple Menu - for Moderators like thatha - Basic functionality to manage songs, reviews, and users.
-    [] Advanced Menu - for Admins like me - Full functionality to manage all aspects of the website, including content, users, and settings.
+  [c] Make a redesigned, custom and simpler admin menu:
+    [x] Simple Menu - for Moderators like thatha - Basic functionality to manage songs, reviews, and users.
+    [x] Advanced Menu - for Admins like me - Full functionality to manage all aspects of the website, including content, users, and settings.
     This must be outside the already existing Django admin panel, and must be a custom menu with a custom design and layout.
     The option to access it must be available only to users with the appropriate permissions, and must be protected by a secure login system.
     It must show up on the navbar when a user with the appropriate permissions is logged in, and must be hidden from users without the appropriate permissions.
     Also, it must stay with the same design and layout as the rest of the website, and must be responsive to different screen sizes and devices.
+  [] Fix Massive UI Lag and make it extremely smooth
+  [] Create Newsletter System for users to subscribe and receive updates about new songs, features, and other relevant information.
+  
   
 Note:
   [] The website is currently in development and may not be fully functional. Please report any issues or bugs to the development team.

@@ -1,0 +1,14 @@
+{% extends 'admin_menu/base_admin.html' %}
+{% block breadcrumbs %}
+  <a href="{% url 'admin_menu' %}">Admin</a> / <a href="{% url 'mod_reviews_list' %}">Reviews</a> / <span>Delete</span>
+{% endblock breadcrumbs %}
+{% block admin_content %}
+  <div class="auth-card">
+    <h2>Delete Review</h2>
+    <p>Delete review by {{ review.user.username }} on "{{ review.song.name }}"?</p>
+    <form method="post">{% csrf_token %}
+      <button class="button" type="submit">Yes, delete</button>
+      <a class="button button-light" href="{% url 'mod_reviews_list' %}">Cancel</a>
+    </form>
+  </div>
+{% endblock admin_content %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}{% endblock extra_head %}
+
+{% block content %}
+<div class="admin-page">
+  <div class="admin-container">
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand"><strong>Moderator</strong></div>
+      <nav class="sidebar-nav">
+        <a href="{% url 'admin_menu' %}">Dashboard</a>
+        <a href="{% url 'mod_songs_list' %}">Songs</a>
+        <a href="{% url 'mod_reviews_list' %}">Reviews</a>
+        <a href="{% url 'mod_contacts_list' %}">Contacts</a>
+        <a href="{% url 'mod_users_list' %}">Users</a>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      <div class="admin-breadcrumbs">{% block breadcrumbs %}{% endblock breadcrumbs %}</div>
+      <div class="admin-content">{% block admin_content %}{% endblock admin_content %}</div>
+    </main>
+  </div>
+</div>
+
+<style>
+.admin-container { display:flex; gap:20px; width:min(1180px,calc(100% - 48px)); margin:28px auto; }
+.admin-sidebar { width:220px; background:var(--glass-bg); border-radius:12px; padding:14px; border:1px solid var(--glass-border); }
+.sidebar-nav { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.sidebar-nav a { padding:8px 10px; border-radius:8px; color:var(--ink); display:block; }
+.admin-main { flex:1; }
+.admin-breadcrumbs { margin-bottom:12px; color:var(--muted); }
+.admin-content { background:var(--paper); padding:18px; border-radius:12px; }
+/* Table visuals */
+.table { width:100%; border-collapse:collapse; }
+.table thead th { text-align:left; padding:10px 12px; color:var(--muted); font-weight:600; }
+.table tbody td { padding:10px 12px; }
+.table.table-bordered thead th, .table.table-bordered tbody td { border-bottom:1px solid var(--glass-border); }
+.table-wrap { overflow:auto; }
+.table-actions { margin-bottom:12px; }
+
+/* Responsive stack for small screens */
+@media (max-width:700px){
+  .table { display:block; }
+  .table thead { display:none; }
+  .table tbody tr { display:block; margin-bottom:12px; background:var(--glass-bg); border-radius:8px; padding:12px; border:1px solid var(--glass-border); }
+  .table tbody td { display:flex; justify-content:space-between; padding:6px 0; border:none; }
+  .table tbody td::before { content: attr(data-label); color:var(--muted); margin-right:8px; font-weight:600; }
+}
+
+/* Form helpers for admin forms */
+.admin-content .form-row { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.admin-content .form-row.two-up { display:flex; gap:12px; }
+.admin-content .form-row.two-up > div { flex:1; }
+.admin-content label { font-weight:600; color:var(--muted); }
+.admin-content input[type="text"], .admin-content input[type="file"], .admin-content textarea, .admin-content select { padding:10px 12px; border-radius:8px; border:1px solid var(--glass-border); background:var(--paper-strong); color:var(--ink); }
+.admin-content input[type="text"], .admin-content textarea, .admin-content select { width:100%; box-sizing:border-box; }
+.admin-content textarea { min-height:100px; }
+.form-actions { display:flex; gap:8px; margin-top:12px; }
+@media (max-width:900px){ .admin-container{flex-direction:column} .admin-sidebar{width:100%; order:2} .admin-main{order:1} }
+</style>
+
+{% endblock content %}

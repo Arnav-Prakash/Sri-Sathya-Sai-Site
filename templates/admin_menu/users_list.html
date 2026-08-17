@@ -1,0 +1,36 @@
+{% extends 'admin_menu/base_admin.html' %}
+{% block title %}<title>Manage Users</title>{% endblock title %}
+
+{% block breadcrumbs %}
+  <a href="{% url 'admin_menu' %}">Admin</a> / <span>Users</span>
+{% endblock breadcrumbs %}
+
+{% block admin_content %}
+  <div class="table-actions">
+    <!-- future: Create user via UI if needed -->
+  </div>
+  <h2>Manage Users</h2>
+  <div class="table-wrap">
+    <table class="table table-bordered">
+      <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Active</th><th>Staff</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td data-label="ID">{{ u.id }}</td>
+          <td data-label="Username">{{ u.username }}</td>
+          <td data-label="Email">{{ u.email }}</td>
+          <td data-label="Active">{{ u.is_active }}</td>
+          <td data-label="Staff">{{ u.is_staff }}</td>
+          <td data-label="Actions">
+            <a class="button" href="{% url 'mod_user_edit' u.id %}">Edit</a>
+            <form method="post" action="{% url 'mod_user_toggle_active' u.id %}" style="display:inline">{% csrf_token %}<button class="button button-light" type="submit">Toggle Active</button></form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">No users found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="pagination">{% if users.has_previous %}<a href="?page={{ users.previous_page_number }}">Previous</a>{% endif %} <span>Page {{ users.number }} of {{ users.paginator.num_pages }}</span> {% if users.has_next %}<a href="?page={{ users.next_page_number }}">Next</a>{% endif %}</div>
+  </div>
+{% endblock admin_content %}

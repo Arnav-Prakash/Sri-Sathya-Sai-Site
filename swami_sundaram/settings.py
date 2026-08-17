@@ -27,7 +27,7 @@ SECRET_KEY = 'o+q4hqly3&xyh_%%*z*!t380%tf5x+b2sd0j=7$sp86vl-dc6n'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    #'localhost', '127.0.0.1'
+    'localhost', '127.0.0.1', '.ts.net', 'arnavs-macbook-pro'
 ]
 
 
@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'swami_sundaram.middleware.AdminRestrictMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'swami_sundaram.context_processors.admin_menu',
             ],
         },
     },
